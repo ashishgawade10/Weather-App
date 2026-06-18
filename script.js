@@ -74,10 +74,8 @@ let iconCode = data.weather[0].icon;
 
 
 
-document.getElementById("icon").setAttribute(
-"src",
-"https://openweathermap.org/img/wn/" + iconCode + "@2x.png"
-);
+document.getElementById("icon").src =
+`https://openweathermap.org/img/wn/${iconCode}.png`;
 
 
 
