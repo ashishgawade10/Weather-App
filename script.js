@@ -1,134 +1,84 @@
-async function getWeather(){
+async function getWeather() {
+
+    let city = document.getElementById("city").value;
+
+    let apiKey = "6103fc4d43bd347814526a8e6daa5e10";
+
+    let url = 
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
 
-let city = document.getElementById("city").value;
+    document.getElementById("cityName").innerHTML = "Loading...";
 
 
+    try {
 
-let apiKey = "6103fc4d43bd347814526a8e6daa5e10";
+        let response = await fetch(url);
 
-
-
-let url =
-`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        let data = await response.json();
 
 
-
-// Loading message
-
-document.getElementById("cityName").innerHTML =
-"Loading...";
+        if (data.cod == 200) {
 
 
-
-try{
-
-
-let response = await fetch(url);
+            document.getElementById("cityName").innerHTML =
+            data.name;
 
 
-let data = await response.json();
+            document.getElementById("temperature").innerHTML =
+            Math.round(data.main.temp) + " °C";
 
 
+            document.getElementById("description").innerHTML =
+            data.weather[0].description;
 
 
-if(data.cod == 200){
+            document.getElementById("humidity").innerHTML =
+            "Humidity: " + data.main.humidity + "%";
 
 
-
-document.getElementById("cityName").innerHTML =
-data.name;
-
+            document.getElementById("wind").innerHTML =
+            "Wind Speed: " + data.wind.speed + " m/s";
 
 
+            // Weather Icon Fix
+            let iconCode = data.weather[0].icon;
 
-document.getElementById("temperature").innerHTML =
-Math.round(data.main.temp) + " °C";
+            document.getElementById("icon").src =
+            `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
-
-
-
-
-document.getElementById("description").innerHTML =
-data.weather[0].description;
+            document.getElementById("icon").style.display = "block";
 
 
+        } else {
+
+            alert("City not found");
+
+            document.getElementById("cityName").innerHTML = "";
+
+        }
 
 
-document.getElementById("humidity").innerHTML =
-"Humidity: " + data.main.humidity + "%";
+    } catch(error) {
 
+        alert("Something went wrong");
 
-
-
-
-document.getElementById("wind").innerHTML =
-"Wind Speed: " + data.wind.speed + " m/s";
-
-
-
-
-
-
-let iconCode = data.weather[0].icon;
-
-
-
-document.getElementById("icon").src =
-`https://openweathermap.org/img/wn/${iconCode}.png`;
-
-
+    }
 
 }
 
 
 
-else{
-
-
-alert("City not found");
-
-
-document.getElementById("cityName").innerHTML = "";
-
-
-}
-
-
-
-}
-
-
-
-catch(error){
-
-
-alert("Something went wrong");
-
-
-}
-
-
-
-}
-
-
-
-
-// Search using Enter key
+// Press Enter to Search
 
 document.getElementById("city").addEventListener(
 "keypress",
-function(event){
+function(event) {
 
+    if(event.key === "Enter") {
 
-if(event.key === "Enter"){
+        getWeather();
 
-
-getWeather();
-
-
-}
-
+    }
 
 });
