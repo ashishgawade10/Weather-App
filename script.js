@@ -1,84 +1,159 @@
-async function getWeather() {
-
-    let city = document.getElementById("city").value;
-
-    let apiKey = "6103fc4d43bd347814526a8e6daa5e10";
-
-    let url = 
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+async function getWeather(){
 
 
-    document.getElementById("cityName").innerHTML = "Loading...";
+let city = document.getElementById("city").value;
 
 
-    try {
-
-        let response = await fetch(url);
-
-        let data = await response.json();
+let apiKey = "6103fc4d43bd347814526a8e6daa5e10";
 
 
-        if (data.cod == 200) {
+let url =
+`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
 
-            document.getElementById("cityName").innerHTML =
-            data.name;
+
+document.getElementById("cityName").innerHTML =
+"Loading...";
 
 
-            document.getElementById("temperature").innerHTML =
-            Math.round(data.main.temp) + " °C";
+
+try{
 
 
-            document.getElementById("description").innerHTML =
-            data.weather[0].description;
+let response = await fetch(url);
 
 
-            document.getElementById("humidity").innerHTML =
-            "Humidity: " + data.main.humidity + "%";
+let data = await response.json();
 
 
-            document.getElementById("wind").innerHTML =
-            "Wind Speed: " + data.wind.speed + " m/s";
+
+if(data.cod == 200){
 
 
-            // Weather Icon Fix
-            let iconCode = data.weather[0].icon;
 
-            document.getElementById("icon").src =
-            `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-
-            document.getElementById("icon").style.display = "block";
+document.getElementById("cityName").innerHTML =
+data.name;
 
 
-        } else {
 
-            alert("City not found");
-
-            document.getElementById("cityName").innerHTML = "";
-
-        }
+document.getElementById("temperature").innerHTML =
+Math.round(data.main.temp) + " °C";
 
 
-    } catch(error) {
 
-        alert("Something went wrong");
+document.getElementById("description").innerHTML =
+data.weather[0].description;
 
-    }
+
+
+document.getElementById("humidity").innerHTML =
+"Humidity: " + data.main.humidity + "%";
+
+
+
+document.getElementById("wind").innerHTML =
+"Wind Speed: " + data.wind.speed + " m/s";
+
+
+
+
+
+// Weather Emoji
+
+let condition = data.weather[0].main;
+
+
+let emoji = "🌤️";
+
+
+if(condition == "Clear"){
+
+emoji="☀️";
+
+}
+
+else if(condition == "Clouds"){
+
+emoji="☁️";
+
+}
+
+else if(condition == "Rain"){
+
+emoji="🌧️";
+
+}
+
+else if(condition == "Thunderstorm"){
+
+emoji="⛈️";
+
+}
+
+else if(condition == "Snow"){
+
+emoji="❄️";
+
+}
+
+else if(condition=="Mist" || condition=="Fog"){
+
+emoji="🌫️";
 
 }
 
 
 
-// Press Enter to Search
+document.getElementById("weatherEmoji").innerHTML =
+emoji;
+
+
+
+}
+
+
+else{
+
+
+alert("City not found");
+
+document.getElementById("cityName").innerHTML="";
+
+
+}
+
+
+
+}
+
+
+catch(error){
+
+
+alert("Something went wrong");
+
+
+}
+
+
+}
+
+
+
+
+
+// Enter key search
 
 document.getElementById("city").addEventListener(
 "keypress",
-function(event) {
+function(event){
 
-    if(event.key === "Enter") {
 
-        getWeather();
+if(event.key==="Enter"){
 
-    }
+getWeather();
+
+}
+
 
 });
